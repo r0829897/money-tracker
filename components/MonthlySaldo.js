@@ -1,67 +1,44 @@
-import React, { useState } from "react";
 import axios from "axios";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
   Modal,
   Alert,
-  TouchableOpacity,
   TextInput,
+  TouchableOpacity,
+  Pressable,
 } from "react-native";
 import PoppinsText from "./PoppinsText";
 import { URL_SERVER } from "../config";
 
-export default AddButton = ({ onPress, user }) => {
+export default MonthlySaldo = ({ monthlySaldo, onPress, userId }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [title, onChangeTitle] = useState("");
-  const [amount, onChangeAmount] = useState("");
-
-  function resetInput() {
-    onChangeTitle("");
-    onChangeAmount("");
-  }
+  const [input, onChangeInput] = useState("");
 
   const handlePress = () => {
-    let updatedUser = undefined;
     axios
-      .post(`${URL_SERVER}api/payments/${user._id}`, {
-        title,
-        amount,
+      .post(`${URL_SERVER}api/monthlySaldo/${userId}`, {
+        monthlySaldo: Number(input),
       })
       .then((res) => {
-        updatedUser = res.data;
-        axios
-          .post(`${URL_SERVER}api/currentSaldo/${user._id}`, {
-            currentSaldo: user.currentSaldo + Number(amount),
-          })
-          .then((res) => {
-            updatedUser = res.data;
-            onPress(updatedUser);
-            resetInput();
-            console.log(`Succesfully updated the user.\n New user data:`);
-            console.log(updatedUser);
-          })
-          .catch((err) => {
-            console.log(
-              `Error while updating the current saldo: ${err.message}`
-            );
-            return;
-          });
+        onPress(res.data);
+        console.log(`Changed monthly saldo to: ${res.data.monthlySaldo}\n`);
       })
-      .catch((err) => {
-        console.log(`Error while updating the payments: ${err.message}`);
-        return;
-      });
+      .then((err) =>
+        console.log(`Error while changing monthly saldo: ${err}\n`)
+      );
+    onChangeInput("");
   };
 
   return (
-    <View style={styles.container}>
+    <Pressable style={styles.container} onPress={() => setModalVisible(true)}>
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
+          Alert.alert("Modal has been closed...");
           setModalVisible(!modalVisible);
         }}
       >
@@ -69,21 +46,15 @@ export default AddButton = ({ onPress, user }) => {
           <View style={styles.modalContent}>
             <View style={styles.titleContainer}>
               <PoppinsText style={styles.titleContent}>
-                Add a new payment
+                Edit monthly saldo
               </PoppinsText>
             </View>
             <View style={styles.contentContainer}>
               <TextInput
                 style={styles.input}
-                value={title}
-                onChangeText={onChangeTitle}
-                placeholder="Title of the payment..."
-              />
-              <TextInput
-                style={styles.input}
-                value={amount}
-                onChangeText={onChangeAmount}
-                placeholder="Amount..."
+                value={input}
+                onChangeText={onChangeInput}
+                placeholder="Enter new monthly saldo..."
                 keyboardType="numeric"
               />
             </View>
@@ -102,7 +73,7 @@ export default AddButton = ({ onPress, user }) => {
               <TouchableOpacity
                 style={{
                   ...styles.button,
-                  backgroundColor: "#36AD4A",
+                  backgroundColor: "#9CA69D",
                   flexBasis: 80,
                 }}
                 onPress={() => {
@@ -110,29 +81,41 @@ export default AddButton = ({ onPress, user }) => {
                   handlePress();
                 }}
               >
-                <PoppinsText style={{ color: "white" }}>Add</PoppinsText>
+                <PoppinsText style={{ color: "white" }}>Edit</PoppinsText>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
 
-      <TouchableOpacity
-        style={{ ...styles.button, backgroundColor: "#36AD4A" }}
-        onPress={() => setModalVisible(true)}
-      >
-        <PoppinsText style={{ color: "white" }}>Add Payment</PoppinsText>
-      </TouchableOpacity>
-    </View>
+      <PoppinsText style={styles.title}>Monthly saldo:</PoppinsText>
+      <PoppinsText style={styles.monthlySaldo}>{`€${
+        Math.round(monthlySaldo * 100) / 100
+      }`}</PoppinsText>
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    position: "absolute",
-    bottom: 20,
-    right: 20,
+    backgroundColor: "#9CA69D",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: 25,
+    paddingRight: 25,
+    paddingTop: 15,
+    paddingBottom: 15,
+  },
+  title: {
+    color: "white",
+    fontSize: 12,
+    letterSpacing: 3.12,
+  },
+  monthlySaldo: {
+    color: "#FFA800",
+    letterSpacing: 3.12,
+    marginLeft: 10,
   },
   centeredView: {
     flex: 1,
@@ -147,7 +130,7 @@ const styles = StyleSheet.create({
     borderColor: "#ede9e8",
   },
   titleContainer: {
-    backgroundColor: "#36AD4A",
+    backgroundColor: "#9CA69D",
     paddingVertical: 9,
     paddingHorizontal: 20,
     flexDirection: "row",

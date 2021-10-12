@@ -5,45 +5,68 @@ import MainCard from "./components/MainCard";
 import Payments from "./components/Payments";
 import AddButton from "./components/AddButton";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { URL_SERVER } from "./config";
 
 export default function App() {
   const [user, setUser] = useState({ payments: [] });
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const load = (id) => {
-    if (!id) {
-      axios
-        .get(`${URL_SERVER}api/init`)
-        .then((res) => {
-          setUser(res.data);
-          console.log(res.data);
-        })
-        .catch((err) => {
-          setErrorMessage(err.message);
-          console.log(errorMessage);
-        });
-    } else {
-      axios
-        .get(`${URL_SERVER}api/user/${id}`)
-        .then((res) => setUser(res.data))
-        .catch((err) => console.log(err));
-      console.log(user);
+  const load = async () => {
+    try {
+      const id = await AsyncStorage.getItem("id");
+
+      if (!id) {
+        axios
+          .get(`${URL_SERVER}api/init`)
+          .then((res) => {
+            setUser(res.data);
+            AsyncStorage.setItem("id", res.data._id);
+            console.log(
+              `No id found in local storage.\n Initialized new user:`
+            );
+            console.log(res.data);
+          })
+          .catch((err) => {
+            setErrorMessage(err.message);
+            console.log(
+              `Error while initializing a new user.\n ${errorMessage}\n`
+            );
+          });
+      } else {
+        axios
+          .get(`${URL_SERVER}api/user/${id}`)
+          .then((res) => {
+            setUser(res.data);
+            console.log(
+              `Id found in local storage: ${res.data._id}.\n User data:`
+            );
+            console.log(res.data);
+          })
+          .catch((err) => {
+            setErrorMessage(err.message);
+            console.log(
+              `Error while fetching a existing user.\n ${errorMessage}\n`
+            );
+          });
+      }
+    } catch (err) {
+      console.log(`Error while getting id in local storage: ${err}`);
     }
   };
 
   useEffect(() => {
-    /* JUST FOR DEV PURPOSES */
-    load("6164849c9efeae4e9d0aeecd");
-    /* */
+    load();
   }, []);
 
   return (
     <View style={styles.container}>
       <Title />
       <MainCard
-        currentAmount={user.currentAmount}
-        monthlyAmount={user.monthlyAmount}
+        currentSaldo={user.currentSaldo}
+        monthlySaldo={user.monthlySaldo}
+        user={user}
+        onPress={setUser}
       />
       <Payments payments={user.payments} />
       <AddButton onPress={setUser} user={user} />
