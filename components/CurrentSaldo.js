@@ -25,7 +25,7 @@ export default CurrentSaldo = ({ currentSaldo, onPress, userId }) => {
         onPress(res.data);
         console.log(`Changed current saldo to: ${res.data.currentSaldo}\n`);
       })
-      .then((err) =>
+      .catch((err) =>
         console.log(`Error while changing current saldo: ${err}\n`)
       );
     onChangeInput("");

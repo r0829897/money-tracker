@@ -12,6 +12,44 @@ export default function App() {
   const [user, setUser] = useState({ payments: [] });
   const [errorMessage, setErrorMessage] = useState(null);
 
+  const nextMonth = (month) => {
+    if (!user) {
+      console.log("No user while calling 'nextMonth()'");
+      return 1;
+    }
+
+    const currentMonth = new Date().getMonth() + 1;
+    if (currentMonth === month) return 0;
+
+    axios
+      .post(`${URL_SERVER}api/currentMonth/${user._id}`, { currentMonth })
+      .then((res) => {
+        setUser(res.data);
+        console.log(
+          `Updated the current month from ${month} -> ${currentMonth}.\n User data:`
+        );
+        console.log(res.data);
+
+        axios
+          .post(`${URL_SERVER}api/currentSaldo/${user._id}`, {
+            currentSaldo: user.currentSaldo + user.monthlySaldo,
+          })
+          .then((res) => {
+            setUser(res.data);
+            console.log(`Changed current saldo to: ${res.data.currentSaldo}\n`);
+          })
+          .catch((err) =>
+            console.log(`Error while changing current saldo: ${err}\n`)
+          );
+      })
+      .catch((err) => {
+        setErrorMessage(err.message);
+        console.log(
+          `Error while trying to update the current month: ${errorMessage}`
+        );
+      });
+  };
+
   const load = async () => {
     try {
       const id = await AsyncStorage.getItem("id");
@@ -42,6 +80,8 @@ export default function App() {
               `Id found in local storage: ${res.data._id}.\n User data:`
             );
             console.log(res.data);
+
+            nextMonth(user.currentMonth);
           })
           .catch((err) => {
             setErrorMessage(err.message);

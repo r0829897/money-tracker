@@ -21,7 +21,16 @@ export default AddButton = ({ onPress, user }) => {
     onChangeAmount("");
   }
 
+  function valInput() {
+    return title && amount;
+  }
+
   const handlePress = () => {
+    if (!valInput()) {
+      Alert.alert("Not a valid input");
+      return 1;
+    }
+
     let updatedUser = undefined;
     axios
       .post(`${URL_SERVER}api/payments/${user._id}`, {
@@ -45,12 +54,12 @@ export default AddButton = ({ onPress, user }) => {
             console.log(
               `Error while updating the current saldo: ${err.message}`
             );
-            return;
+            return 1;
           });
       })
       .catch((err) => {
         console.log(`Error while updating the payments: ${err.message}`);
-        return;
+        return 1;
       });
   };
 

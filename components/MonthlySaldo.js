@@ -25,7 +25,7 @@ export default MonthlySaldo = ({ monthlySaldo, onPress, userId }) => {
         onPress(res.data);
         console.log(`Changed monthly saldo to: ${res.data.monthlySaldo}\n`);
       })
-      .then((err) =>
+      .catch((err) =>
         console.log(`Error while changing monthly saldo: ${err}\n`)
       );
     onChangeInput("");
