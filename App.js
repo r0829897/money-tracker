@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
 import MainCard from "./components/MainCard";
 import MonthlySaldo from "./components/MonthlySaldo";
 import Payments from "./components/Payments";
@@ -129,5 +129,7 @@ const styles = StyleSheet.create({
     paddingTop: 55,
     flex: 1,
     backgroundColor: "#01021B",
+    borderColor: "red",
+    borderWidth: 1,
   },
 });

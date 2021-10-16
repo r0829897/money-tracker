@@ -7,7 +7,9 @@ export default MainCard = ({ currentSaldo, user, onPress }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={["rgba(255, 168, 0, 0.45) 0%", "rgba(96, 97, 120, 0.22) 100%"]}
+        colors={["rgba(255, 168, 0, 0.45)", "rgba(96, 97, 120, 0.22)"]}
+        locations={[0, 1]}
+        end={{ x: 1, y: 0 }}
       >
         <CurrentSaldo
           currentSaldo={currentSaldo}
@@ -23,9 +25,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 41,
     marginBottom: 50,
-    padding: 24,
     borderRadius: 15,
-    borderWidth: 1,
-    borderColor: "red",
+    overflow: "hidden",
   },
 });

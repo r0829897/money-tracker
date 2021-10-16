@@ -88,7 +88,7 @@ export default CurrentSaldo = ({ currentSaldo, onPress, userId }) => {
         </View>
       </Modal>
 
-      <PoppinsText style={styles.title}>Current saldo:</PoppinsText>
+      <PoppinsText style={styles.title}>Current saldo</PoppinsText>
       <PoppinsText style={styles.currentSaldo}>{`€${
         Math.round(currentSaldo * 100) / 100 // round to 2 decimal places
       }`}</PoppinsText>
@@ -97,18 +97,24 @@ export default CurrentSaldo = ({ currentSaldo, onPress, userId }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    paddingVertical: 29,
+  },
   title: {
     color: "white",
     fontSize: 16,
     textTransform: "uppercase",
-    fontWeight: "bold",
-    letterSpacing: 3.12,
+    fontWeight: "500",
+    letterSpacing: 2.16,
+    textAlign: "center",
+    marginBottom: 10,
   },
   currentSaldo: {
     color: "white",
-    fontSize: 44,
-    letterSpacing: 3.12,
+    fontSize: 66,
+    fontWeight: "500",
+    letterSpacing: 3.44,
+    textAlign: "center",
   },
   centeredView: {
     flex: 1,

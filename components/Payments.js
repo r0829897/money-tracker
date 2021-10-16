@@ -29,13 +29,11 @@ export default Payments = ({ payments }) => {
 
 const styles = StyleSheet.create({
   header: {
-    color: "#707671",
-    letterSpacing: 2.72,
+    color: "#E5E6F5",
+    textAlign: "center",
+    letterSpacing: 3.04,
     textTransform: "uppercase",
-    fontSize: 16,
-    marginBottom: 20,
-  },
-  payments: {
-    paddingBottom: 50,
+    fontSize: 17,
+    marginBottom: 23,
   },
 });

@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import PoppinsText from "./PoppinsText";
 import { URL_SERVER } from "../config";
+import { AutoEncryptionLoggerLevel } from "mongodb";
 
 export default AddButton = ({ onPress, user }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -127,7 +128,10 @@ export default AddButton = ({ onPress, user }) => {
       </Modal>
 
       <TouchableOpacity
-        style={{ ...styles.button, backgroundColor: "#36AD4A" }}
+        style={{
+          ...styles.button,
+          backgroundColor: "#202141",
+        }}
         onPress={() => setModalVisible(true)}
       >
         <PoppinsText style={{ color: "white" }}>Add Payment</PoppinsText>
@@ -138,10 +142,11 @@ export default AddButton = ({ onPress, user }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     position: "absolute",
     bottom: 20,
-    right: 20,
+
+    borderWidth: 1,
+    borderColor: "blue",
   },
   centeredView: {
     flex: 1,

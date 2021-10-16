@@ -92,7 +92,7 @@ export default MonthlySaldo = ({ monthlySaldo, onPress, userId }) => {
         <PoppinsText
           style={{ color: "white", fontSize: 17, letterSpacing: 0.88 }}
         >
-          Monthly saldo
+          Monthly deposit
         </PoppinsText>
       </View>
       <PoppinsText style={styles.monthlySaldo}>{`€${
