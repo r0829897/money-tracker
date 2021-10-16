@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import PoppinsText from "./PoppinsText";
 import { URL_SERVER } from "../config";
-import { AutoEncryptionLoggerLevel } from "mongodb";
 
 export default AddButton = ({ onPress, user }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -142,11 +141,7 @@ export default AddButton = ({ onPress, user }) => {
 
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
-    bottom: 20,
-
-    borderWidth: 1,
-    borderColor: "blue",
+    marginBottom: 20,
   },
   centeredView: {
     flex: 1,

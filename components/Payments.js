@@ -36,4 +36,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginBottom: 23,
   },
+  payments: {
+    flex: 1,
+    paddingBottom: 10,
+  },
 });

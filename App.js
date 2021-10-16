@@ -129,7 +129,5 @@ const styles = StyleSheet.create({
     paddingTop: 55,
     flex: 1,
     backgroundColor: "#01021B",
-    borderColor: "red",
-    borderWidth: 1,
   },
 });
