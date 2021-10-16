@@ -97,10 +97,7 @@ export default CurrentSaldo = ({ currentSaldo, onPress, userId }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#011E06",
-    padding: 24,
-  },
+  container: {},
   title: {
     color: "white",
     fontSize: 16,

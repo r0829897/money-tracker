@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import Title from "./components/Title";
 import MainCard from "./components/MainCard";
+import MonthlySaldo from "./components/MonthlySaldo";
 import Payments from "./components/Payments";
 import AddButton from "./components/AddButton";
 import axios from "axios";
@@ -19,7 +19,8 @@ export default function App() {
     }
 
     const currentMonth = new Date().getMonth() + 1;
-    if (currentMonth === month) return 0;
+    if (currentMonth === month)
+      console.log(`Still in the same month: ${month}, ${currentMonth}`);
     else
       axios
         .post(`${URL_SERVER}api/currentMonth/${user._id}`, { currentMonth })
@@ -83,7 +84,9 @@ export default function App() {
             );
             console.log(res.data);
 
-            nextMonth(user.currentMonth);
+            if (user) {
+              nextMonth(user.currentMonth);
+            }
           })
           .catch((err) => {
             setErrorMessage(err.message);
@@ -103,10 +106,13 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Title />
+      <MonthlySaldo
+        monthlySaldo={user.monthlySaldo}
+        onPress={setUser}
+        userId={user._id}
+      />
       <MainCard
         currentSaldo={user.currentSaldo}
-        monthlySaldo={user.monthlySaldo}
         user={user}
         onPress={setUser}
       />

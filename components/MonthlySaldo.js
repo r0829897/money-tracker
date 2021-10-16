@@ -88,7 +88,13 @@ export default MonthlySaldo = ({ monthlySaldo, onPress, userId }) => {
         </View>
       </Modal>
 
-      <PoppinsText style={styles.title}>Monthly saldo:</PoppinsText>
+      <View style={styles.title}>
+        <PoppinsText
+          style={{ color: "white", fontSize: 17, letterSpacing: 0.88 }}
+        >
+          Monthly saldo
+        </PoppinsText>
+      </View>
       <PoppinsText style={styles.monthlySaldo}>{`€${
         Math.round(monthlySaldo * 100) / 100
       }`}</PoppinsText>
@@ -98,24 +104,22 @@ export default MonthlySaldo = ({ monthlySaldo, onPress, userId }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#9CA69D",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    paddingLeft: 25,
-    paddingRight: 25,
-    paddingTop: 15,
-    paddingBottom: 15,
   },
   title: {
-    color: "white",
-    fontSize: 12,
-    letterSpacing: 3.12,
+    borderWidth: 1,
+    borderColor: "#202039",
+    paddingHorizontal: 14,
+    paddingVertical: 5,
+    borderRadius: 10,
   },
   monthlySaldo: {
     color: "#FFA800",
-    letterSpacing: 3.12,
-    marginLeft: 10,
+    fontSize: 19,
+    letterSpacing: 0.88,
+    marginLeft: 20,
   },
   centeredView: {
     flex: 1,
