@@ -73,7 +73,7 @@ export default CurrentSaldo = ({ currentSaldo, onPress, userId }) => {
               <TouchableOpacity
                 style={{
                   ...styles.button,
-                  backgroundColor: "#011E06",
+                  backgroundColor: "#01021B",
                   flexBasis: 80,
                 }}
                 onPress={() => {
@@ -122,14 +122,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContent: {
-    backgroundColor: "white",
+    backgroundColor: "#353657",
     borderRadius: 10,
     overflow: "hidden",
-    borderWidth: 0.5,
-    borderColor: "#ede9e8",
   },
   titleContainer: {
-    backgroundColor: "#011E06",
+    backgroundColor: "#202141",
     paddingVertical: 9,
     paddingHorizontal: 20,
     flexDirection: "row",
@@ -144,9 +142,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   input: {
-    borderWidth: 1,
+    backgroundColor: "white",
     borderRadius: 10,
-    borderColor: "#B2B9B3",
     width: 250,
     height: 40,
     marginVertical: 5,
