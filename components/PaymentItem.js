@@ -8,38 +8,42 @@ import {
 } from "react-native";
 import PoppinsText from "./PoppinsText";
 import Swipeable from "react-native-gesture-handler/Swipeable";
+import EditIcon from "./EditIcon";
+import DeleteIcon from "./DeleteIcon";
 
 const RightActions = ({ progress, dragX, onPressDelete, onPressEdit }) => {
-  const scale = dragX.interpolate({
-    inputRange: [-100, 0],
-    outputRange: [1, 0],
-    extrapolate: "clamp",
-  });
+  /* If you wanna put text */
+
+  // const scale = dragX.interpolate({
+  //   inputRange: [-100, 0],
+  //   outputRange: [1, 0],
+  //   extrapolate: "clamp",
+  // });
   return (
     <View style={styles.rightAction}>
-      <TouchableOpacity onPress={onPressEdit}>
-        <Animated.Text
+      <TouchableOpacity style={{ marginHorizontal: 5 }} onPress={onPressEdit}>
+        {/* <Animated.Text
           style={{
             color: "#B2B9B3",
             transform: [{ scale }],
             fontFamily: "Poppins_400Regular",
             marginHorizontal: 5,
           }}
-        >
-          Edit
-        </Animated.Text>
+        > */}
+        <EditIcon />
+        {/* </Animated.Text> */}
       </TouchableOpacity>
-      <TouchableOpacity onPress={onPressDelete}>
-        <Animated.Text
+      <TouchableOpacity style={{ marginHorizontal: 5 }} onPress={onPressDelete}>
+        {/* <Animated.Text
           style={{
             color: "#BB0909",
             transform: [{ scale }],
             fontFamily: "Poppins_400Regular",
             marginHorizontal: 5,
           }}
-        >
-          Delete
-        </Animated.Text>
+        > */}
+        <DeleteIcon />
+        {/* </Animated.Text> */}
       </TouchableOpacity>
     </View>
   );

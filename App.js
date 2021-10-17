@@ -13,7 +13,7 @@ export default function App() {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const nextMonth = (month) => {
-    if (!user) {
+    if (!user._id) {
       console.log("No user while calling 'nextMonth()'");
       return 1;
     }
@@ -46,14 +46,14 @@ export default function App() {
             );
         })
         .catch((err) => {
-          setErrorMessage(err.message);
+          setErrorMessage(err);
           console.log(
             `Error while trying to update the current month: ${errorMessage}`
           );
         });
   };
 
-  const load = async () => {
+  const loadUser = async () => {
     try {
       const id = await AsyncStorage.getItem("id");
 
@@ -83,10 +83,6 @@ export default function App() {
               `Id found in local storage: ${res.data._id}.\n User data:`
             );
             console.log(res.data);
-
-            if (user) {
-              nextMonth(user.currentMonth);
-            }
           })
           .catch((err) => {
             setErrorMessage(err.message);
@@ -101,8 +97,12 @@ export default function App() {
   };
 
   useEffect(() => {
-    load();
+    loadUser();
   }, []);
+
+  useEffect(() => {
+    nextMonth(user.currentMonth);
+  }, [user.currentMonth]);
 
   return (
     <View style={styles.container}>
