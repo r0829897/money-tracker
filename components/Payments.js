@@ -1,15 +1,24 @@
 import React from "react";
-import { View, StyleSheet, FlatList, SafeAreaView } from "react-native";
+import { View, StyleSheet, FlatList, SafeAreaView, Alert } from "react-native";
 import PoppinsText from "./PoppinsText";
 import PaymentItem from "./PaymentItem";
 
 export default Payments = ({ payments }) => {
+  const deletePayment = () => {
+    Alert.alert("Delete payment");
+  };
+  const editPayment = () => {
+    Alert.alert("Edit payment");
+  };
+
   const renderItem = ({ item }) => (
     <PaymentItem
       id={item._id}
       title={item.title}
       amount={item.amount}
       date={item.date.split("T")[0]}
+      onPressDelete={deletePayment}
+      onPressEdit={editPayment}
     />
   );
 
