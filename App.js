@@ -23,7 +23,7 @@ export default function App() {
       console.log(`Still in the same month: ${month}, ${currentMonth}`);
     else
       axios
-        .post(`${URL_SERVER}api/currentMonth/${user._id}`, { currentMonth })
+        .put(`${URL_SERVER}api/currentMonth/${user._id}`, { currentMonth })
         .then((res) => {
           setUser(res.data);
           console.log(
@@ -32,7 +32,7 @@ export default function App() {
           console.log(res.data);
 
           axios
-            .post(`${URL_SERVER}api/currentSaldo/${user._id}`, {
+            .put(`${URL_SERVER}api/currentSaldo/${user._id}`, {
               currentSaldo: user.currentSaldo + user.monthlySaldo,
             })
             .then((res) => {

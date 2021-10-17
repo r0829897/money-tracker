@@ -18,7 +18,7 @@ export default MonthlySaldo = ({ monthlySaldo, onPress, userId }) => {
 
   const handlePress = () => {
     axios
-      .post(`${URL_SERVER}api/monthlySaldo/${userId}`, {
+      .put(`${URL_SERVER}api/monthlySaldo/${userId}`, {
         monthlySaldo: Number(input),
       })
       .then((res) => {

@@ -33,14 +33,14 @@ export default AddButton = ({ onPress, user }) => {
 
     let updatedUser = undefined;
     axios
-      .post(`${URL_SERVER}api/payments/${user._id}`, {
+      .patch(`${URL_SERVER}api/payments/${user._id}`, {
         title,
         amount,
       })
       .then((res) => {
         updatedUser = res.data;
         axios
-          .post(`${URL_SERVER}api/currentSaldo/${user._id}`, {
+          .put(`${URL_SERVER}api/currentSaldo/${user._id}`, {
             currentSaldo: user.currentSaldo + Number(amount),
           })
           .then((res) => {

@@ -18,7 +18,7 @@ export default CurrentSaldo = ({ currentSaldo, onPress, userId }) => {
 
   const handlePress = () => {
     axios
-      .post(`${URL_SERVER}api/currentSaldo/${userId}`, {
+      .put(`${URL_SERVER}api/currentSaldo/${userId}`, {
         currentSaldo: Number(input),
       })
       .then((res) => {
