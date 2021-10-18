@@ -17,6 +17,7 @@ export default EditPaymentModal = ({
   onPress,
   payment,
   id,
+  currentSaldo,
 }) => {
   const [title, onChangeTitle] = useState("");
   const [amount, onChangeAmount] = useState("");
@@ -32,6 +33,25 @@ export default EditPaymentModal = ({
       title: title ? title : payment.title,
       amount: amount ? Number(amount) : payment.amount,
     };
+
+    if (newPayment.amount !== payment.amount) {
+      try {
+        const res = await axios.put(`${URL_SERVER}api/currentSaldo/${id}`, {
+          currentSaldo: currentSaldo + (newPayment.amount - payment.amount),
+        });
+        console.log(res.data);
+        onPress(res.data);
+        console.log(
+          `New amount, added the difference to currentSaldo: ${
+            newPayment.amount - payment.amount
+          }`
+        );
+      } catch (err) {
+        console.log(
+          `Error while trying to update currentSaldo while editing payment: ${err}`
+        );
+      }
+    }
 
     try {
       const res = await axios.patch(`${URL_SERVER}api/editPayment/${id}`, {

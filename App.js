@@ -116,7 +116,12 @@ export default function App() {
         user={user}
         onPress={setUser}
       />
-      <Payments payments={user.payments} onPress={setUser} id={user._id} />
+      <Payments
+        payments={user.payments}
+        onPress={setUser}
+        id={user._id}
+        currentSaldo={user.currentSaldo}
+      />
       <AddButton user={user} onPress={setUser} />
     </View>
   );

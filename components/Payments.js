@@ -6,7 +6,7 @@ import { URL_SERVER } from "../config";
 import EditPaymentModal from "./Modals/EditPaymentModal";
 import axios from "axios";
 
-export default Payments = ({ payments, onPress, id }) => {
+export default Payments = ({ payments, onPress, id, currentSaldo }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [editingPayment, setEditingPayment] = useState(null);
 
@@ -42,6 +42,7 @@ export default Payments = ({ payments, onPress, id }) => {
         onPress={onPress}
         payment={editingPayment}
         id={id}
+        currentSaldo={currentSaldo}
       />
 
       <PoppinsText style={styles.header}>Recent Payments</PoppinsText>
