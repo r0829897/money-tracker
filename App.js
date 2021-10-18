@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import MainCard from "./components/MainCard";
 import MonthlySaldo from "./components/MonthlySaldo";
 import Payments from "./components/Payments";
@@ -108,16 +108,16 @@ export default function App() {
     <View style={styles.container}>
       <MonthlySaldo
         monthlySaldo={user.monthlySaldo}
-        onPress={setUser}
         userId={user._id}
+        onPress={setUser}
       />
       <MainCard
         currentSaldo={user.currentSaldo}
         user={user}
         onPress={setUser}
       />
-      <Payments payments={user.payments} />
-      <AddButton onPress={setUser} user={user} />
+      <Payments payments={user.payments} onPress={setUser} id={user._id} />
+      <AddButton user={user} onPress={setUser} />
     </View>
   );
 }

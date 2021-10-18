@@ -11,7 +11,13 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 import EditIcon from "./EditIcon";
 import DeleteIcon from "./DeleteIcon";
 
-const RightActions = ({ progress, dragX, onPressDelete, onPressEdit }) => {
+const RightActions = ({
+  progress,
+  dragX,
+  onPressDelete,
+  onPressEdit,
+  payment,
+}) => {
   /* If you wanna put text */
 
   // const scale = dragX.interpolate({
@@ -21,7 +27,10 @@ const RightActions = ({ progress, dragX, onPressDelete, onPressEdit }) => {
   // });
   return (
     <View style={styles.rightAction}>
-      <TouchableOpacity style={{ marginHorizontal: 5 }} onPress={onPressEdit}>
+      <TouchableOpacity
+        style={{ marginHorizontal: 5 }}
+        onPress={() => onPressEdit(payment)}
+      >
         {/* <Animated.Text
           style={{
             color: "#B2B9B3",
@@ -33,7 +42,10 @@ const RightActions = ({ progress, dragX, onPressDelete, onPressEdit }) => {
         <EditIcon />
         {/* </Animated.Text> */}
       </TouchableOpacity>
-      <TouchableOpacity style={{ marginHorizontal: 5 }} onPress={onPressDelete}>
+      <TouchableOpacity
+        style={{ marginHorizontal: 5 }}
+        onPress={() => onPressDelete(payment._id)}
+      >
         {/* <Animated.Text
           style={{
             color: "#BB0909",
@@ -49,14 +61,7 @@ const RightActions = ({ progress, dragX, onPressDelete, onPressEdit }) => {
   );
 };
 
-export default PaymentItem = ({
-  id,
-  title,
-  amount,
-  date,
-  onPressDelete,
-  onPressEdit,
-}) => {
+export default PaymentItem = ({ payment, onPressDelete, onPressEdit }) => {
   return (
     <View style={styles.container}>
       <Swipeable
@@ -66,25 +71,30 @@ export default PaymentItem = ({
             dragX={dragX}
             onPressDelete={onPressDelete}
             onPressEdit={onPressEdit}
+            payment={payment}
           />
         )}
       >
-        <View key={id} style={styles.contentContainer}>
+        <View key={payment._id} style={styles.contentContainer}>
           <View style={styles.info}>
-            <PoppinsText style={styles.title}>{title}</PoppinsText>
-            <PoppinsText style={styles.date}>{date}</PoppinsText>
+            <PoppinsText style={styles.title}>{payment.title}</PoppinsText>
+            <PoppinsText style={styles.date}>
+              {payment.date.split("T")[0]}
+            </PoppinsText>
           </View>
           <View style={styles.amount}>
             <PoppinsText
               // PoppinsText support only 1 style prop
               style={{
-                color: amount < 0 ? "white" : "#FFA800",
+                color: payment.amount < 0 ? "white" : "#FFA800",
                 fontSize: 19,
                 letterSpacing: 1.2,
                 fontWeight: "600",
               }}
             >
-              {amount < 0 ? "-€" + -amount : "+€" + amount}
+              {payment.amount < 0
+                ? "-€" + -payment.amount
+                : "+€" + payment.amount}
             </PoppinsText>
           </View>
         </View>

@@ -1,29 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, FlatList, SafeAreaView, Alert } from "react-native";
 import PoppinsText from "./PoppinsText";
 import PaymentItem from "./PaymentItem";
+import { URL_SERVER } from "../config";
+import EditPaymentModal from "./Modals/EditPaymentModal";
+import axios from "axios";
 
-export default Payments = ({ payments }) => {
-  const deletePayment = () => {
-    Alert.alert("Delete payment");
-  };
-  const editPayment = () => {
-    Alert.alert("Edit payment");
+export default Payments = ({ payments, onPress, id }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [editingPayment, setEditingPayment] = useState(null);
+
+  const deletePayment = async (paymentId) => {
+    try {
+      const res = await axios.patch(`${URL_SERVER}api/deletePayment/${id}`, {
+        paymentId,
+      });
+      onPress(res.data);
+      console.log(`Deleted payment with id ${paymentId}, updated user:`);
+      console.log(res.data);
+    } catch (err) {
+      console.log(`Error while deleting payment: ${err}`);
+    }
   };
 
   const renderItem = ({ item }) => (
     <PaymentItem
-      id={item._id}
-      title={item.title}
-      amount={item.amount}
-      date={item.date.split("T")[0]}
+      payment={item}
       onPressDelete={deletePayment}
-      onPressEdit={editPayment}
+      onPressEdit={(payment) => {
+        setModalVisible(true);
+        setEditingPayment(payment);
+      }}
     />
   );
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <EditPaymentModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        onPress={onPress}
+        payment={editingPayment}
+        id={id}
+      />
+
       <PoppinsText style={styles.header}>Recent Payments</PoppinsText>
       <View style={styles.payments}>
         <FlatList
