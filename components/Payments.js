@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, FlatList, SafeAreaView, Alert } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import PoppinsText from "./PoppinsText";
 import PaymentItem from "./PaymentItem";
 import { URL_SERVER } from "../config";
@@ -35,7 +35,11 @@ export default Payments = ({ payments, onPress, id, currentSaldo }) => {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <View
+      style={{
+        flex: 1,
+      }}
+    >
       <EditPaymentModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
@@ -53,7 +57,7 @@ export default Payments = ({ payments, onPress, id, currentSaldo }) => {
           keyExtractor={(item) => item._id}
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

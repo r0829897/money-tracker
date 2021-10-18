@@ -33,7 +33,7 @@ export default function App() {
 
           axios
             .put(`${URL_SERVER}api/currentSaldo/${user._id}`, {
-              currentSaldo: user.currentSaldo + user.monthlySaldo,
+              currentSaldo: user.monthlySaldo,
             })
             .then((res) => {
               setUser(res.data);

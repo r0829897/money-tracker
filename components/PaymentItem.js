@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  Animated,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import PoppinsText from "./PoppinsText";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import EditIcon from "./EditIcon";
@@ -105,7 +99,7 @@ export default PaymentItem = ({ payment, onPressDelete, onPressEdit }) => {
 
 const styles = StyleSheet.create({
   container: {
-    overflow: "hidden",
+    overflow: "visible",
     borderRadius: 10,
     marginBottom: 14,
     height: 71,

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import {
   View,
   Modal,
@@ -8,17 +9,14 @@ import {
   Pressable,
 } from "react-native";
 import PoppinsText from "../PoppinsText";
-import axios from "axios";
 import { URL_SERVER } from "../../config";
 import styles from "./styles/modalStyle";
 
-export default EditPaymentModal = ({
+export default AddPaymentModal = ({
   modalVisible,
   setModalVisible,
   onPress,
-  payment,
-  id,
-  currentSaldo,
+  user,
 }) => {
   const [title, onChangeTitle] = useState("");
   const [amount, onChangeAmount] = useState("");
@@ -28,44 +26,46 @@ export default EditPaymentModal = ({
     onChangeAmount("");
   }
 
-  const handlePress = async () => {
-    const newPayment = {
-      ...payment,
-      title: title ? title : payment.title,
-      amount: amount ? Number(amount) : payment.amount,
-    };
+  function valInput() {
+    return title && amount;
+  }
 
-    if (newPayment.amount !== payment.amount) {
-      try {
-        const res = await axios.put(`${URL_SERVER}api/currentSaldo/${id}`, {
-          currentSaldo: currentSaldo + (newPayment.amount - payment.amount),
-        });
-        console.log(res.data);
-        onPress(res.data);
-        console.log(
-          `New amount, added the difference to currentSaldo: ${
-            newPayment.amount - payment.amount
-          }`
-        );
-      } catch (err) {
-        console.log(
-          `Error while trying to update currentSaldo while editing payment: ${err}`
-        );
-      }
+  const handlePress = () => {
+    if (!valInput()) {
+      Alert.alert("Not a valid input");
+      return 1;
     }
 
-    try {
-      const res = await axios.patch(`${URL_SERVER}api/editPayment/${id}`, {
-        payment: newPayment,
+    let updatedUser = undefined;
+    axios
+      .patch(`${URL_SERVER}api/payments/${user._id}`, {
+        title,
+        amount,
+      })
+      .then((res) => {
+        updatedUser = res.data;
+        axios
+          .put(`${URL_SERVER}api/currentSaldo/${user._id}`, {
+            currentSaldo: user.currentSaldo + Number(amount),
+          })
+          .then((res) => {
+            updatedUser = res.data;
+            onPress(updatedUser);
+            resetInput();
+            console.log(`Succesfully updated the user.\n New user data:`);
+            console.log(updatedUser);
+          })
+          .catch((err) => {
+            console.log(
+              `Error while updating the current saldo: ${err.message}`
+            );
+            return 1;
+          });
+      })
+      .catch((err) => {
+        console.log(`Error while updating the payments: ${err.message}`);
+        return 1;
       });
-      onPress(res.data);
-      console.log(`Updated payment, updated user:`);
-      console.log(res.data);
-    } catch (err) {
-      console.log(`Error while trying to update payment: ${err}`);
-    }
-
-    resetInput();
   };
 
   return (
@@ -82,7 +82,7 @@ export default EditPaymentModal = ({
         <View style={styles.modalContent}>
           <View style={styles.titleContainer}>
             <PoppinsText style={styles.titleContent}>
-              Edit a payment
+              Add a new payment
             </PoppinsText>
           </View>
           <View style={styles.contentContainer}>
@@ -90,21 +90,18 @@ export default EditPaymentModal = ({
               style={styles.input}
               value={title}
               onChangeText={onChangeTitle}
-              placeholder="Edit the title..."
+              placeholder="Title of the payment..."
               placeholderTextColor="#BAADAD"
             />
             <TextInput
               style={styles.input}
               value={amount}
               onChangeText={onChangeAmount}
-              placeholder="New amount..."
+              placeholder="Amount..."
               placeholderTextColor="#BAADAD"
               keyboardType="numeric"
             />
           </View>
-          <PoppinsText style={[styles.infoText, { marginTop: -10 }]}>
-            * Empty fields will keep the same values.
-          </PoppinsText>
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={[styles.button, styles.buttonSecondary]}
@@ -125,7 +122,7 @@ export default EditPaymentModal = ({
                 handlePress();
               }}
             >
-              <PoppinsText style={styles.buttonPrimaryText}>Edit</PoppinsText>
+              <PoppinsText style={styles.buttonPrimaryText}>Add</PoppinsText>
             </Pressable>
           </View>
         </View>
