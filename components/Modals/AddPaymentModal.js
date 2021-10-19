@@ -27,6 +27,7 @@ export default AddPaymentModal = ({
   }
 
   function valInput() {
+    if (!Number(amount)) return false;
     return title && amount;
   }
 

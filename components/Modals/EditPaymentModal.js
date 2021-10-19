@@ -28,7 +28,16 @@ export default EditPaymentModal = ({
     onChangeAmount("");
   }
 
+  function valInput() {
+    return Boolean(Number(amount));
+  }
+
   const handlePress = async () => {
+    if (!valInput()) {
+      Alert.alert("Not a valid input");
+      return 1;
+    }
+
     const newPayment = {
       ...payment,
       title: title ? title : payment.title,

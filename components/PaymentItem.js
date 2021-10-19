@@ -87,8 +87,8 @@ export default PaymentItem = ({ payment, onPressDelete, onPressEdit }) => {
               }}
             >
               {payment.amount < 0
-                ? "-€" + -payment.amount
-                : "+€" + payment.amount}
+                ? "-€" + Math.round(-payment.amount * 100) / 100
+                : "+€" + Math.round(payment.amount * 100) / 100}
             </PoppinsText>
           </View>
         </View>

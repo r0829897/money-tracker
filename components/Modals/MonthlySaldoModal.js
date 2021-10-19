@@ -20,18 +20,26 @@ export default MonthlySaldoModal = ({
 }) => {
   const [input, onChangeInput] = useState("");
 
-  const handlePress = () => {
-    axios
-      .put(`${URL_SERVER}api/monthlySaldo/${userId}`, {
+  function valInput() {
+    if (!Number(input)) return false;
+    return Boolean(input);
+  }
+
+  const handlePress = async () => {
+    if (!valInput()) {
+      Alert.alert("Not a valid input");
+      return 1;
+    }
+
+    try {
+      const res = await axios.put(`${URL_SERVER}api/monthlySaldo/${userId}`, {
         monthlySaldo: Number(input),
-      })
-      .then((res) => {
-        onPress(res.data);
-        console.log(`Changed monthly saldo to: ${res.data.monthlySaldo}\n`);
-      })
-      .catch((err) =>
-        console.log(`Error while changing monthly saldo: ${err}\n`)
-      );
+      });
+      onPress(res.data);
+      console.log(`Changed monthly saldo to: ${res.data.monthlySaldo}\n`);
+    } catch (err) {
+      console.log(`Error while changing monthly saldo: ${err}\n`);
+    }
     onChangeInput("");
   };
 

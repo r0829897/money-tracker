@@ -20,18 +20,26 @@ export default CurrentSaldoModal = ({
 }) => {
   const [input, onChangeInput] = useState("");
 
-  const handlePress = () => {
-    axios
-      .put(`${URL_SERVER}api/currentSaldo/${userId}`, {
+  function valInput() {
+    if (!Number(input)) return false;
+    return Boolean(input);
+  }
+
+  const handlePress = async () => {
+    if (!valInput()) {
+      Alert.alert("Not a valid input");
+      return 1;
+    }
+
+    try {
+      const res = await axios.put(`${URL_SERVER}api/currentSaldo/${userId}`, {
         currentSaldo: Number(input),
-      })
-      .then((res) => {
-        onPress(res.data);
-        console.log(`Changed current saldo to: ${res.data.currentSaldo}\n`);
-      })
-      .catch((err) =>
-        console.log(`Error while changing current saldo: ${err}\n`)
-      );
+      });
+      onPress(res.data);
+      console.log(`Changed current saldo to: ${res.data.currentSaldo}\n`);
+    } catch (err) {
+      console.log(`Error while changing current saldo: ${err}\n`);
+    }
     onChangeInput("");
   };
 
