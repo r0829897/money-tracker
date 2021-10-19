@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef, useRef } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import PoppinsText from "./PoppinsText";
 import Swipeable from "react-native-gesture-handler/Swipeable";
@@ -62,47 +62,66 @@ const RightActions = ({
   );
 };
 
-export default PaymentItem = ({ payment, onPressDelete, onPressEdit }) => {
-  return (
-    <View style={styles.container}>
-      <Swipeable
-        renderRightActions={(progress, dragX) => (
-          <RightActions
-            progress={progress}
-            dragX={dragX}
-            onPressDelete={onPressDelete}
-            onPressEdit={onPressEdit}
-            payment={payment}
-          />
-        )}
-      >
-        <View key={payment._id} style={styles.contentContainer}>
-          <View style={styles.info}>
-            <PoppinsText style={styles.title}>{payment.title}</PoppinsText>
-            <PoppinsText style={styles.date}>
-              {payment.date.split("T")[0]}
-            </PoppinsText>
+export default PaymentItem = forwardRef(
+  ({ payment, onPressDelete, onPressEdit }, previousRef) => {
+    const swipeRef = useRef(null);
+
+    const handleSwipeableWillOpen = () => {
+      if (previousRef && previousRef.current !== null) {
+        if (previousRef.current !== swipeRef.current) {
+          previousRef.current?.close();
+        }
+      }
+    };
+
+    const handleSwipeableOpen = () => {
+      previousRef.current = swipeRef.current;
+    };
+
+    return (
+      <View style={styles.container}>
+        <Swipeable
+          ref={swipeRef}
+          onSwipeableOpen={handleSwipeableOpen}
+          onSwipeableWillOpen={handleSwipeableWillOpen}
+          renderRightActions={(progress, dragX) => (
+            <RightActions
+              progress={progress}
+              dragX={dragX}
+              onPressDelete={onPressDelete}
+              onPressEdit={onPressEdit}
+              payment={payment}
+            />
+          )}
+        >
+          <View key={payment._id} style={styles.contentContainer}>
+            <View style={styles.info}>
+              <PoppinsText style={styles.title}>{payment.title}</PoppinsText>
+              <PoppinsText style={styles.date}>
+                {payment.date.split("T")[0]}
+              </PoppinsText>
+            </View>
+            <View style={styles.amount}>
+              <PoppinsText
+                // PoppinsText support only 1 style prop
+                style={{
+                  color: payment.amount < 0 ? "white" : PRIMARY_COLOR,
+                  fontSize: 19,
+                  letterSpacing: 1.2,
+                  fontWeight: "600",
+                }}
+              >
+                {payment.amount < 0
+                  ? "-€" + Math.round(-payment.amount * 100) / 100
+                  : "+€" + Math.round(payment.amount * 100) / 100}
+              </PoppinsText>
+            </View>
           </View>
-          <View style={styles.amount}>
-            <PoppinsText
-              // PoppinsText support only 1 style prop
-              style={{
-                color: payment.amount < 0 ? "white" : PRIMARY_COLOR,
-                fontSize: 19,
-                letterSpacing: 1.2,
-                fontWeight: "600",
-              }}
-            >
-              {payment.amount < 0
-                ? "-€" + Math.round(-payment.amount * 100) / 100
-                : "+€" + Math.round(payment.amount * 100) / 100}
-            </PoppinsText>
-          </View>
-        </View>
-      </Swipeable>
-    </View>
-  );
-};
+        </Swipeable>
+      </View>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {

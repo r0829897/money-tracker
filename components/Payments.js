@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import PoppinsText from "./PoppinsText";
 import PaymentItem from "./PaymentItem";
@@ -23,8 +23,11 @@ export default Payments = ({ payments, onPress, id, currentSaldo }) => {
     }
   };
 
+  const ref = useRef(null);
+
   const renderItem = ({ item }) => (
     <PaymentItem
+      ref={ref}
       payment={item}
       onPressDelete={deletePayment}
       onPressEdit={(payment) => {
