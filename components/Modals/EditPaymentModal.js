@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import PoppinsText from "../PoppinsText";
 import axios from "axios";
-import { URL_SERVER } from "../../config";
+import { PRIMARY_COLOR, URL_SERVER } from "../../config";
 import styles from "./styles/modalStyle";
 
 export default EditPaymentModal = ({
@@ -70,45 +70,6 @@ export default EditPaymentModal = ({
     resetInput();
   };
 
-  // const handlePress = async () => {
-  //   const newPayment = {
-  //     ...payment,
-  //     title: title ? title : payment.title,
-  //     amount: amount ? Number(amount) : payment.amount,
-  //   };
-
-  //   if (newPayment.amount !== payment.amount) {
-  //     try {
-  //       const res = await axios.put(`${URL_SERVER}api/currentSaldo/${id}`, {
-  //         currentSaldo: currentSaldo + (newPayment.amount - payment.amount),
-  //       });
-  //       onPress(res.data);
-  //       console.log(
-  //         `New amount, added the difference to currentSaldo: ${
-  //           newPayment.amount - payment.amount
-  //         }`
-  //       );
-  //     } catch (err) {
-  //       console.log(
-  //         `Error while trying to update currentSaldo while editing payment: ${err}`
-  //       );
-  //     }
-  //   }
-
-  //   try {
-  //     const res = await axios.patch(`${URL_SERVER}api/editPayment/${id}`, {
-  //       payment: newPayment,
-  //     });
-  //     onPress(res.data);
-  //     console.log(`Updated payment, updated user:`);
-  //     console.log(res.data);
-  //   } catch (err) {
-  //     console.log(`Error while trying to update payment: ${err}`);
-  //   }
-
-  //   resetInput();
-  // };
-
   return (
     <Modal
       animationType="slide"
@@ -157,7 +118,7 @@ export default EditPaymentModal = ({
             </TouchableOpacity>
             <Pressable
               style={({ pressed }) => [
-                pressed && { backgroundColor: "#FFA800" },
+                pressed && { backgroundColor: PRIMARY_COLOR },
                 styles.button,
                 styles.buttonPrimary,
               ]}

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import PoppinsText from "./PoppinsText";
 import PaymentItem from "./PaymentItem";
-import { URL_SERVER } from "../config";
+import { SECONDARY_FONT_COLOR, URL_SERVER } from "../config";
 import EditPaymentModal from "./Modals/EditPaymentModal";
 import axios from "axios";
 
@@ -63,7 +63,7 @@ export default Payments = ({ payments, onPress, id, currentSaldo }) => {
 
 const styles = StyleSheet.create({
   header: {
-    color: "#E5E6F5",
+    color: SECONDARY_FONT_COLOR,
     textAlign: "center",
     letterSpacing: 3.04,
     textTransform: "uppercase",

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import PoppinsText from "./PoppinsText";
 import CurrentSaldoModal from "./Modals/CurrentSaldoModal";
+import { PRIMARY_FONT_COLOR } from "../config";
 
 export default CurrentSaldo = ({ currentSaldo, onPress, userId }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
     paddingVertical: 29,
   },
   title: {
-    color: "white",
+    color: PRIMARY_FONT_COLOR,
     fontSize: 16,
     textTransform: "uppercase",
     fontWeight: "500",

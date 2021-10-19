@@ -2,8 +2,15 @@ import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import PoppinsText from "./PoppinsText";
 import Swipeable from "react-native-gesture-handler/Swipeable";
-import EditIcon from "./EditIcon";
-import DeleteIcon from "./DeleteIcon";
+import EditIcon from "./icons/EditIcon";
+import DeleteIcon from "./icons/DeleteIcon";
+import {
+  BORDER_COLOR,
+  DARK_COLOR,
+  MEDIUM_COLOR,
+  PRIMARY_COLOR,
+  SECONDARY_FONT_COLOR,
+} from "../config";
 
 const RightActions = ({
   progress,
@@ -80,7 +87,7 @@ export default PaymentItem = ({ payment, onPressDelete, onPressEdit }) => {
             <PoppinsText
               // PoppinsText support only 1 style prop
               style={{
-                color: payment.amount < 0 ? "white" : "#FFA800",
+                color: payment.amount < 0 ? "white" : PRIMARY_COLOR,
                 fontSize: 19,
                 letterSpacing: 1.2,
                 fontWeight: "600",
@@ -99,11 +106,11 @@ export default PaymentItem = ({ payment, onPressDelete, onPressEdit }) => {
 
 const styles = StyleSheet.create({
   container: {
-    overflow: "visible",
+    overflow: "hidden",
     borderRadius: 10,
     marginBottom: 14,
     height: 71,
-    backgroundColor: "#202141",
+    backgroundColor: MEDIUM_COLOR,
   },
   contentContainer: {
     display: "flex",
@@ -114,8 +121,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 71,
     borderWidth: 1,
-    borderColor: "#202039",
-    backgroundColor: "#01021B",
+    borderColor: BORDER_COLOR,
+    backgroundColor: DARK_COLOR,
   },
   amount: {
     display: "flex",
@@ -138,7 +145,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   date: {
-    color: "#E5E6F5",
+    color: SECONDARY_FONT_COLOR,
     fontSize: 11,
   },
   rightAction: {

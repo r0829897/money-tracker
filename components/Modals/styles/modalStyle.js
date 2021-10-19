@@ -1,5 +1,11 @@
 import React from "react";
 import { StyleSheet } from "react-native";
+import {
+  LIGHT_COLOR,
+  MEDIUM_COLOR,
+  PRIMARY_COLOR,
+  PRIMARY_FONT_COLOR,
+} from "../../../config";
 
 const styles = StyleSheet.create({
   centeredView: {
@@ -8,7 +14,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContent: {
-    backgroundColor: "#353657",
+    backgroundColor: LIGHT_COLOR,
     borderRadius: 10,
     overflow: "hidden",
   },
@@ -19,7 +25,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   titleContent: {
-    color: "white",
+    color: PRIMARY_FONT_COLOR,
     fontSize: 15,
   },
   contentContainer: {
@@ -27,7 +33,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   input: {
-    backgroundColor: "#202141",
+    backgroundColor: MEDIUM_COLOR,
     borderRadius: 10,
     width: 250,
     height: 40,
@@ -42,7 +48,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: "#202141",
+    backgroundColor: MEDIUM_COLOR,
   },
   button: {
     overflow: "hidden",
@@ -57,7 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3D3E5C",
   },
   buttonSecondaryText: { color: "#9697AF" },
-  buttonPrimary: { borderWidth: 1, borderColor: "#FFA800", flexBasis: 80 },
+  buttonPrimary: { borderWidth: 1, borderColor: PRIMARY_COLOR, flexBasis: 80 },
   buttonPrimaryText: { color: "white" },
   infoText: {
     fontSize: 12,
