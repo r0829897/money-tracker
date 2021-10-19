@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import Title from "./components/Title";
 import MainCard from "./components/MainCard";
+import MonthlySaldo from "./components/MonthlySaldo";
 import Payments from "./components/Payments";
 import AddButton from "./components/AddButton";
 import axios from "axios";
@@ -10,106 +10,85 @@ import { URL_SERVER } from "./config";
 
 export default function App() {
   const [user, setUser] = useState({ payments: [] });
-  const [errorMessage, setErrorMessage] = useState(null);
 
-  const nextMonth = (month) => {
-    if (!user) {
+  const nextMonth = async (month) => {
+    if (!user._id) {
       console.log("No user while calling 'nextMonth()'");
       return 1;
     }
 
     const currentMonth = new Date().getMonth() + 1;
-    if (currentMonth === month) return 0;
-
-    axios
-      .post(`${URL_SERVER}api/currentMonth/${user._id}`, { currentMonth })
-      .then((res) => {
+    if (currentMonth === month)
+      console.log(`Still in the same month: ${month}, ${currentMonth}`);
+    else {
+      try {
+        await axios.put(`${URL_SERVER}api/currentMonth/${user._id}`, {
+          currentMonth,
+        });
+        const res = await axios.put(
+          `${URL_SERVER}api/currentSaldo/${user._id}`,
+          {
+            currentSaldo: user.monthlySaldo,
+          }
+        );
         setUser(res.data);
         console.log(
-          `Updated the current month from ${month} -> ${currentMonth}.\n User data:`
+          `Updated the current month from ${month} -> ${currentMonth}. And changed current saldo to: ${res.data.currentSaldo}\n`
         );
-        console.log(res.data);
-
-        axios
-          .post(`${URL_SERVER}api/currentSaldo/${user._id}`, {
-            currentSaldo: user.currentSaldo + user.monthlySaldo,
-          })
-          .then((res) => {
-            setUser(res.data);
-            console.log(`Changed current saldo to: ${res.data.currentSaldo}\n`);
-          })
-          .catch((err) =>
-            console.log(`Error while changing current saldo: ${err}\n`)
-          );
-      })
-      .catch((err) => {
-        setErrorMessage(err.message);
-        console.log(
-          `Error while trying to update the current month: ${errorMessage}`
-        );
-      });
+      } catch (err) {
+        console.log(`Error while trying to update the current month: ${err}`);
+      }
+    }
   };
 
-  const load = async () => {
+  const loadUser = async () => {
     try {
       const id = await AsyncStorage.getItem("id");
 
       if (!id) {
-        axios
-          .get(`${URL_SERVER}api/init`)
-          .then((res) => {
-            setUser(res.data);
-            AsyncStorage.setItem("id", res.data._id);
-            console.log(
-              `No id found in local storage.\n Initialized new user:`
-            );
-            console.log(res.data);
-          })
-          .catch((err) => {
-            setErrorMessage(err.message);
-            console.log(
-              `Error while initializing a new user.\n ${errorMessage}\n`
-            );
-          });
+        const res = await axios.get(`${URL_SERVER}api/init`);
+        setUser(res.data);
+        AsyncStorage.setItem("id", res.data._id);
+        console.log(`No id found in local storage.\n Initialized new user:`);
+        console.log(res.data);
       } else {
-        axios
-          .get(`${URL_SERVER}api/user/${id}`)
-          .then((res) => {
-            setUser(res.data);
-            console.log(
-              `Id found in local storage: ${res.data._id}.\n User data:`
-            );
-            console.log(res.data);
-
-            nextMonth(user.currentMonth);
-          })
-          .catch((err) => {
-            setErrorMessage(err.message);
-            console.log(
-              `Error while fetching a existing user.\n ${errorMessage}\n`
-            );
-          });
+        const res = await axios.get(`${URL_SERVER}api/user/${id}`);
+        setUser(res.data);
+        console.log(`Id found in local storage: ${res.data._id}.\n User data:`);
+        console.log(res.data);
       }
     } catch (err) {
-      console.log(`Error while getting id in local storage: ${err}`);
+      console.log(`Error while loading user: ${err}`);
     }
   };
 
   useEffect(() => {
-    load();
+    loadUser();
   }, []);
+
+  useEffect(() => {
+    nextMonth(user.currentMonth);
+  }, [user.currentMonth]);
 
   return (
     <View style={styles.container}>
-      <Title />
+      <MonthlySaldo
+        monthlySaldo={user.monthlySaldo}
+        userId={user._id}
+        onPress={setUser}
+      />
       <MainCard
         currentSaldo={user.currentSaldo}
-        monthlySaldo={user.monthlySaldo}
         user={user}
         onPress={setUser}
       />
-      <Payments payments={user.payments} />
-      <AddButton onPress={setUser} user={user} />
+      <Payments
+        payments={user.payments}
+        onPress={setUser}
+        id={user._id}
+        currentSaldo={user.currentSaldo}
+      />
+      <AddButton user={user} onPress={setUser} />
     </View>
   );
 }
@@ -120,5 +99,6 @@ const styles = StyleSheet.create({
     paddingRight: 46,
     paddingTop: 55,
     flex: 1,
+    backgroundColor: "#01021B",
   },
 });

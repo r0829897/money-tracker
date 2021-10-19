@@ -1,20 +1,54 @@
-import React from "react";
-import { View, StyleSheet, FlatList, SafeAreaView } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, FlatList } from "react-native";
 import PoppinsText from "./PoppinsText";
 import PaymentItem from "./PaymentItem";
+import { URL_SERVER } from "../config";
+import EditPaymentModal from "./Modals/EditPaymentModal";
+import axios from "axios";
 
-export default Payments = ({ payments }) => {
+export default Payments = ({ payments, onPress, id, currentSaldo }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [editingPayment, setEditingPayment] = useState(null);
+
+  const deletePayment = async (paymentId) => {
+    try {
+      const res = await axios.patch(`${URL_SERVER}api/deletePayment/${id}`, {
+        paymentId,
+      });
+      onPress(res.data);
+      console.log(`Deleted payment with id ${paymentId}, updated user:`);
+      console.log(res.data);
+    } catch (err) {
+      console.log(`Error while deleting payment: ${err}`);
+    }
+  };
+
   const renderItem = ({ item }) => (
     <PaymentItem
-      id={item._id}
-      title={item.title}
-      amount={item.amount}
-      date={item.date.split("T")[0]}
+      payment={item}
+      onPressDelete={deletePayment}
+      onPressEdit={(payment) => {
+        setModalVisible(true);
+        setEditingPayment(payment);
+      }}
     />
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <View
+      style={{
+        flex: 1,
+      }}
+    >
+      <EditPaymentModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        onPress={onPress}
+        payment={editingPayment}
+        id={id}
+        currentSaldo={currentSaldo}
+      />
+
       <PoppinsText style={styles.header}>Recent Payments</PoppinsText>
       <View style={styles.payments}>
         <FlatList
@@ -23,19 +57,21 @@ export default Payments = ({ payments }) => {
           keyExtractor={(item) => item._id}
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   header: {
-    color: "#707671",
-    letterSpacing: 2.72,
+    color: "#E5E6F5",
+    textAlign: "center",
+    letterSpacing: 3.04,
     textTransform: "uppercase",
-    fontSize: 16,
-    marginBottom: 20,
+    fontSize: 17,
+    marginBottom: 23,
   },
   payments: {
-    paddingBottom: 50,
+    flex: 1,
+    paddingBottom: 10,
   },
 });
