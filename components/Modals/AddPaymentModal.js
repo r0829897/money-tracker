@@ -30,42 +30,27 @@ export default AddPaymentModal = ({
     return title && amount;
   }
 
-  const handlePress = () => {
+  const handlePress = async () => {
     if (!valInput()) {
       Alert.alert("Not a valid input");
       return 1;
     }
 
-    let updatedUser = undefined;
-    axios
-      .patch(`${URL_SERVER}api/payments/${user._id}`, {
+    try {
+      await axios.patch(`${URL_SERVER}api/payments/${user._id}`, {
         title,
         amount,
-      })
-      .then((res) => {
-        updatedUser = res.data;
-        axios
-          .put(`${URL_SERVER}api/currentSaldo/${user._id}`, {
-            currentSaldo: user.currentSaldo + Number(amount),
-          })
-          .then((res) => {
-            updatedUser = res.data;
-            onPress(updatedUser);
-            resetInput();
-            console.log(`Succesfully updated the user.\n New user data:`);
-            console.log(updatedUser);
-          })
-          .catch((err) => {
-            console.log(
-              `Error while updating the current saldo: ${err.message}`
-            );
-            return 1;
-          });
-      })
-      .catch((err) => {
-        console.log(`Error while updating the payments: ${err.message}`);
-        return 1;
       });
+      const res = await axios.put(`${URL_SERVER}api/currentSaldo/${user._id}`, {
+        currentSaldo: user.currentSaldo + Number(amount),
+      });
+      onPress(res.data);
+      console.log(`Added new payment and updated current saldo. Updated user:`);
+      console.log(res.data);
+    } catch (err) {
+      console.log(`Error while adding payent: ${err}\n`);
+    }
+    resetInput();
   };
 
   return (

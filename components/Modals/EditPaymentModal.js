@@ -35,38 +35,70 @@ export default EditPaymentModal = ({
       amount: amount ? Number(amount) : payment.amount,
     };
 
-    if (newPayment.amount !== payment.amount) {
-      try {
-        const res = await axios.put(`${URL_SERVER}api/currentSaldo/${id}`, {
+    try {
+      if (newPayment.amount !== payment.amount) {
+        await axios.put(`${URL_SERVER}api/currentSaldo/${id}`, {
           currentSaldo: currentSaldo + (newPayment.amount - payment.amount),
         });
-        console.log(res.data);
-        onPress(res.data);
         console.log(
           `New amount, added the difference to currentSaldo: ${
             newPayment.amount - payment.amount
           }`
         );
-      } catch (err) {
-        console.log(
-          `Error while trying to update currentSaldo while editing payment: ${err}`
-        );
       }
-    }
 
-    try {
       const res = await axios.patch(`${URL_SERVER}api/editPayment/${id}`, {
         payment: newPayment,
       });
       onPress(res.data);
-      console.log(`Updated payment, updated user:`);
-      console.log(res.data);
+      console.log(`Updated payment, updated payment:`);
+      console.log(payment);
+      console.log("===>");
+      console.log(newPayment);
     } catch (err) {
-      console.log(`Error while trying to update payment: ${err}`);
+      console.log(`Error while editing payment: ${err}`);
     }
-
     resetInput();
   };
+
+  // const handlePress = async () => {
+  //   const newPayment = {
+  //     ...payment,
+  //     title: title ? title : payment.title,
+  //     amount: amount ? Number(amount) : payment.amount,
+  //   };
+
+  //   if (newPayment.amount !== payment.amount) {
+  //     try {
+  //       const res = await axios.put(`${URL_SERVER}api/currentSaldo/${id}`, {
+  //         currentSaldo: currentSaldo + (newPayment.amount - payment.amount),
+  //       });
+  //       onPress(res.data);
+  //       console.log(
+  //         `New amount, added the difference to currentSaldo: ${
+  //           newPayment.amount - payment.amount
+  //         }`
+  //       );
+  //     } catch (err) {
+  //       console.log(
+  //         `Error while trying to update currentSaldo while editing payment: ${err}`
+  //       );
+  //     }
+  //   }
+
+  //   try {
+  //     const res = await axios.patch(`${URL_SERVER}api/editPayment/${id}`, {
+  //       payment: newPayment,
+  //     });
+  //     onPress(res.data);
+  //     console.log(`Updated payment, updated user:`);
+  //     console.log(res.data);
+  //   } catch (err) {
+  //     console.log(`Error while trying to update payment: ${err}`);
+  //   }
+
+  //   resetInput();
+  // };
 
   return (
     <Modal
