@@ -1,14 +1,46 @@
 import React, { useState, useRef } from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import PoppinsText from "./PoppinsText";
 import PaymentItem from "./PaymentItem";
 import { SECONDARY_FONT_COLOR, URL_SERVER } from "../config";
 import EditPaymentModal from "./Modals/EditPaymentModal";
 import axios from "axios";
+import CrossIcon from "./icons/CrossIcon";
 
 export default Payments = ({ payments, onPress, id, currentSaldo }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [editingPayment, setEditingPayment] = useState(null);
+
+  const handlePress = () => {
+    Alert.alert(
+      "Delete recent payments?",
+      "This action will make no changes to your current saldo.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          onPress: async () => {
+            try {
+              const res = await axios.delete(`${URL_SERVER}api/payments/${id}`);
+              onPress(res.data);
+              console.log("Deleted payments\n");
+            } catch (err) {
+              console.log(`Error whyle deleting payments: ${err}`);
+            }
+          },
+        },
+      ]
+    );
+  };
 
   const deletePayment = async (paymentId) => {
     try {
@@ -52,7 +84,15 @@ export default Payments = ({ payments, onPress, id, currentSaldo }) => {
         currentSaldo={currentSaldo}
       />
 
-      <PoppinsText style={styles.header}>Recent Payments</PoppinsText>
+      <View style={styles.headerContainer}>
+        <PoppinsText style={styles.header}>Recent Payments</PoppinsText>
+        <TouchableOpacity
+          style={{ paddingHorizontal: 10 }}
+          onPress={handlePress}
+        >
+          <CrossIcon />
+        </TouchableOpacity>
+      </View>
       <View style={styles.payments}>
         <FlatList
           data={payments}
@@ -65,13 +105,19 @@ export default Payments = ({ payments, onPress, id, currentSaldo }) => {
 };
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 23,
+  },
   header: {
     color: SECONDARY_FONT_COLOR,
-    textAlign: "center",
     letterSpacing: 3.04,
     textTransform: "uppercase",
     fontSize: 17,
-    marginBottom: 23,
   },
   payments: {
     flex: 1,

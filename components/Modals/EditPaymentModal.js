@@ -35,6 +35,7 @@ export default EditPaymentModal = ({
   const handlePress = async () => {
     if (!valInput()) {
       Alert.alert("Not a valid input");
+      resetInput();
       return 1;
     }
 

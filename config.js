@@ -1,5 +1,5 @@
 // const URL_SERVER = "https://immense-sierra-37582.herokuapp.com/";
-export const URL_SERVER = "http://192.168.137.1:5000/";
+export const URL_SERVER = "http://192.168.0.156:5000/";
 
 // COLORS
 export const PRIMARY_COLOR = "#FFA800";

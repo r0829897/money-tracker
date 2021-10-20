@@ -28,6 +28,7 @@ export default MonthlySaldoModal = ({
   const handlePress = async () => {
     if (!valInput()) {
       Alert.alert("Not a valid input");
+      onChangeInput("");
       return 1;
     }
 
