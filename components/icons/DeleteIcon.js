@@ -1,5 +1,4 @@
 import React from "react";
-import { View } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
 export default DeleteIcon = () => {

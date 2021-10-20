@@ -1,9 +1,16 @@
-import React from "react";
+import React, { forwardRef, useRef } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import PoppinsText from "./PoppinsText";
 import Swipeable from "react-native-gesture-handler/Swipeable";
-import EditIcon from "./EditIcon";
-import DeleteIcon from "./DeleteIcon";
+import EditIcon from "./icons/EditIcon";
+import DeleteIcon from "./icons/DeleteIcon";
+import {
+  BORDER_COLOR,
+  DARK_COLOR,
+  MEDIUM_COLOR,
+  PRIMARY_COLOR,
+  SECONDARY_FONT_COLOR,
+} from "../config";
 
 const RightActions = ({
   progress,
@@ -55,55 +62,74 @@ const RightActions = ({
   );
 };
 
-export default PaymentItem = ({ payment, onPressDelete, onPressEdit }) => {
-  return (
-    <View style={styles.container}>
-      <Swipeable
-        renderRightActions={(progress, dragX) => (
-          <RightActions
-            progress={progress}
-            dragX={dragX}
-            onPressDelete={onPressDelete}
-            onPressEdit={onPressEdit}
-            payment={payment}
-          />
-        )}
-      >
-        <View key={payment._id} style={styles.contentContainer}>
-          <View style={styles.info}>
-            <PoppinsText style={styles.title}>{payment.title}</PoppinsText>
-            <PoppinsText style={styles.date}>
-              {payment.date.split("T")[0]}
-            </PoppinsText>
+export default PaymentItem = forwardRef(
+  ({ payment, onPressDelete, onPressEdit }, previousRef) => {
+    const swipeRef = useRef(null);
+
+    const handleSwipeableWillOpen = () => {
+      if (previousRef && previousRef.current !== null) {
+        if (previousRef.current !== swipeRef.current) {
+          previousRef.current?.close();
+        }
+      }
+    };
+
+    const handleSwipeableOpen = () => {
+      previousRef.current = swipeRef.current;
+    };
+
+    return (
+      <View style={styles.container}>
+        <Swipeable
+          ref={swipeRef}
+          onSwipeableOpen={handleSwipeableOpen}
+          onSwipeableWillOpen={handleSwipeableWillOpen}
+          renderRightActions={(progress, dragX) => (
+            <RightActions
+              progress={progress}
+              dragX={dragX}
+              onPressDelete={onPressDelete}
+              onPressEdit={onPressEdit}
+              payment={payment}
+            />
+          )}
+        >
+          <View key={payment._id} style={styles.contentContainer}>
+            <View style={styles.info}>
+              <PoppinsText style={styles.title}>{payment.title}</PoppinsText>
+              <PoppinsText style={styles.date}>
+                {payment.date.split("T")[0]}
+              </PoppinsText>
+            </View>
+            <View style={styles.amount}>
+              <PoppinsText
+                // PoppinsText support only 1 style prop
+                style={{
+                  color: payment.amount < 0 ? "white" : PRIMARY_COLOR,
+                  fontSize: 19,
+                  letterSpacing: 1.2,
+                  fontWeight: "600",
+                }}
+              >
+                {payment.amount < 0
+                  ? "-€" + Math.round(-payment.amount * 100) / 100
+                  : "+€" + Math.round(payment.amount * 100) / 100}
+              </PoppinsText>
+            </View>
           </View>
-          <View style={styles.amount}>
-            <PoppinsText
-              // PoppinsText support only 1 style prop
-              style={{
-                color: payment.amount < 0 ? "white" : "#FFA800",
-                fontSize: 19,
-                letterSpacing: 1.2,
-                fontWeight: "600",
-              }}
-            >
-              {payment.amount < 0
-                ? "-€" + Math.round(-payment.amount * 100) / 100
-                : "+€" + Math.round(payment.amount * 100) / 100}
-            </PoppinsText>
-          </View>
-        </View>
-      </Swipeable>
-    </View>
-  );
-};
+        </Swipeable>
+      </View>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {
-    overflow: "visible",
+    overflow: "hidden",
     borderRadius: 10,
     marginBottom: 14,
     height: 71,
-    backgroundColor: "#202141",
+    backgroundColor: MEDIUM_COLOR,
   },
   contentContainer: {
     display: "flex",
@@ -114,8 +140,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 71,
     borderWidth: 1,
-    borderColor: "#202039",
-    backgroundColor: "#01021B",
+    borderColor: BORDER_COLOR,
+    backgroundColor: DARK_COLOR,
   },
   amount: {
     display: "flex",
@@ -138,7 +164,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   date: {
-    color: "#E5E6F5",
+    color: SECONDARY_FONT_COLOR,
     fontSize: 11,
   },
   rightAction: {

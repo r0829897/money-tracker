@@ -9,7 +9,7 @@ import {
   Pressable,
 } from "react-native";
 import PoppinsText from "../PoppinsText";
-import { URL_SERVER } from "../../config";
+import { PRIMARY_COLOR, URL_SERVER } from "../../config";
 import styles from "./styles/modalStyle";
 
 export default AddPaymentModal = ({
@@ -34,6 +34,7 @@ export default AddPaymentModal = ({
   const handlePress = async () => {
     if (!valInput()) {
       Alert.alert("Not a valid input");
+      resetInput();
       return 1;
     }
 
@@ -99,7 +100,7 @@ export default AddPaymentModal = ({
             </TouchableOpacity>
             <Pressable
               style={({ pressed }) => [
-                pressed && { backgroundColor: "#FFA800" },
+                pressed && { backgroundColor: PRIMARY_COLOR },
                 styles.button,
                 styles.buttonPrimary,
               ]}

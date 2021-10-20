@@ -6,7 +6,8 @@ import Payments from "./components/Payments";
 import AddButton from "./components/AddButton";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { URL_SERVER } from "./config";
+import { DARK_COLOR, URL_SERVER } from "./config";
+import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   const [user, setUser] = useState({ payments: [] });
@@ -72,6 +73,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="light" />
       <MonthlySaldo
         monthlySaldo={user.monthlySaldo}
         userId={user._id}
@@ -99,6 +101,6 @@ const styles = StyleSheet.create({
     paddingRight: 46,
     paddingTop: 55,
     flex: 1,
-    backgroundColor: "#01021B",
+    backgroundColor: DARK_COLOR,
   },
 });

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import PoppinsText from "./PoppinsText";
 import MonthlySaldoModal from "./Modals/MonthlySaldoModal";
+import { BORDER_COLOR, PRIMARY_COLOR } from "../config";
 
 export default MonthlySaldo = ({ monthlySaldo, onPress, userId }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -40,13 +41,13 @@ const styles = StyleSheet.create({
   },
   title: {
     borderWidth: 1,
-    borderColor: "#202039",
+    borderColor: BORDER_COLOR,
     paddingHorizontal: 14,
     paddingVertical: 5,
     borderRadius: 10,
   },
   monthlySaldo: {
-    color: "#FFA800",
+    color: PRIMARY_COLOR,
     fontSize: 19,
     letterSpacing: 0.88,
     marginLeft: 20,
